@@ -3,6 +3,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { getImages } from 'service/galleryService';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 
 export class App extends Component {
@@ -13,6 +14,7 @@ export class App extends Component {
     isEmpty: false,
     showBtn: false,
     isError: '',
+    isLoading: false,
     largeImageURL: '',
     tags: '',
   };
@@ -28,6 +30,7 @@ export class App extends Component {
           }
           this.setState(prevState => ({
             hits: [...prevState.hits, ...hits],
+            isLoading: false,
             showBtn: page < Math.ceil(totalHits / 12),
           }));
         })
@@ -38,20 +41,26 @@ export class App extends Component {
   }
 
   handleSubmit = query => {
-    this.setState({ query, hits: [], page: 1, isEmpty: false });
+    this.setState({
+      query,
+      hits: [],
+      page: 1,
+      isEmpty: false,
+      isLoading: true,
+    });
   };
 
   loadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(prevState => ({ page: prevState.page + 1, isLoading: true }));
   };
 
   handleOpenModal = ({ largeImageURL, tags }) => {
     console.log(largeImageURL);
-    console.log(tags);
+    this.setState({ largeImageURL, tags });
   };
 
   render() {
-    const { hits, isEmpty, showBtn, isError, largeImageURL, tags } = this.state;
+    const { hits, isEmpty, showBtn, isError } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} nameBatton="Search" />
@@ -59,7 +68,13 @@ export class App extends Component {
         {showBtn && <Button handleClick={this.loadMore} text="LOAD MORE" />}
         {isEmpty && <p>Sorry we nothing find...</p>}
         {isError && <p> {isError} Something is wrong</p>}
-        {largeImageURL && <Modal src={largeImageURL} alt={tags} />}
+        <Loader loading={this.state.isLoading} />
+        {this.state.largeImageURL && (
+          <Modal
+            largeImageURL={this.state.largeImageURL}
+            tags={this.state.tags}
+          />
+        )}
       </>
     );
   }
