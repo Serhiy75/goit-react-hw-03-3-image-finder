@@ -12,13 +12,13 @@ export class Modal extends Component {
 
   handleOverLay = e => {
     if (e.target === e.currentTarget) {
-      this.props.closeModal({ src: '', alt: '' });
+      this.props.closeModal('', '');
     }
   };
 
   handleEscape = e => {
     if (e.key === 'Escape') {
-      this.props.closeModal({ src: '', alt: '' });
+      this.props.closeModal('', '');
     }
   };
 

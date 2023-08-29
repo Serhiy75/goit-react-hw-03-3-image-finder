@@ -54,8 +54,7 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1, isLoading: true }));
   };
 
-  handleOpenModal = ({ largeImageURL, tags }) => {
-    console.log(largeImageURL);
+  handleOpenModal = (largeImageURL, tags) => {
     this.setState({ largeImageURL, tags });
   };
 
@@ -71,6 +70,7 @@ export class App extends Component {
         <Loader loading={this.state.isLoading} />
         {this.state.largeImageURL && (
           <Modal
+            closeModal={this.handleOpenModal}
             largeImageURL={this.state.largeImageURL}
             tags={this.state.tags}
           />

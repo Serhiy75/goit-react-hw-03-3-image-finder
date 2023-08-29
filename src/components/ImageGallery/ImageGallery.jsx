@@ -11,10 +11,7 @@ export const ImageGallery = ({ hits, openModal }) => {
           webformatURL={webformatURL}
           tags={tags}
           key={id}
-          onClick={() => {
-            console.log('hello');
-            openModal(webformatURL, tags);
-          }}
+          openModal={openModal}
         />
       ))}
     </ul>
